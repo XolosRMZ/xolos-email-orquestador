@@ -68,8 +68,7 @@ def render_template_cachorro(cachorro, nombre_cliente, path_template):
 
 def generar_html_fallback(nombre_cliente, intencion):
     """
-    Genera un HTML general cuando no se detecta un cachorro específico,
-    adaptando el mensaje según la intención detectada.
+    Lee el template general e inyecta la respuesta adaptada a la intención.
     """
     mensaje_intencion = ""
     
@@ -80,20 +79,16 @@ def generar_html_fallback(nombre_cliente, intencion):
     elif intencion == 'precio':
         mensaje_intencion = "El precio de nuestros cachorros es de $42,000 MXN, con una reserva inicial de $15,000 MXN. "
     
-    html = f"""
-    <!DOCTYPE html>
-    <html lang="es">
-    <body style="font-family: Arial, sans-serif; color: #333; line-height: 1.6; max-width: 600px; margin: 0 auto; padding: 20px;">
-        <h2 style="color: #2c3e50;">Xolos Ramírez</h2>
-        <p>Hola <strong>{nombre_cliente}</strong>,</p>
-        <p>Gracias por tu interés en nuestra crianza.</p>
-        <p>{mensaje_intencion} Para poder brindarte información detallada y material visual, nos ayudaría mucho saber <strong>qué cachorro en específico ha llamado tu atención</strong>.</p>
-        <p>Puedes conocer a los ejemplares disponibles en nuestra web:</p>
-        <p><a href="https://www.xolosramirez.com/xolos-disponibles.html" style="background-color: #d35400; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Ver Xolos Disponibles</a></p>
-    </body>
-    </html>
-    """
-    return html
+    try:
+        with open('template-general.html', 'r', encoding='utf-8') as f:
+            html = f.read()
+            
+        html = html.replace('{{nombre_cliente}}', nombre_cliente)
+        html = html.replace('{{mensaje_intencion}}', mensaje_intencion)
+        return html
+    except FileNotFoundError:
+        return f"<p>Hola {nombre_cliente}, {mensaje_intencion} Por favor visita la web para elegir un cachorro.</p>"
+
 
 # ==========================================
 # 4. ORQUESTADOR PRINCIPAL
