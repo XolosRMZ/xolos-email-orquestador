@@ -6,3 +6,6 @@ outputs/
 venv/
 *.log
 .env_imap
+
+leads/
+processed_history.json
