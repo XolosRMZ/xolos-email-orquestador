@@ -5,3 +5,4 @@ outputs/
 .venv/
 venv/
 *.log
+.env_imap
